@@ -1,0 +1,63 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using System.IO;
+using System.Threading;
+using System.Text.RegularExpressions;
+
+public partial class ChangeMPIN : System.Web.UI.Page
+{
+    PassBook.ServiceClient objPassBook = new PassBook.ServiceClient();
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        
+        try
+        {
+            string sMobile = Request.Form["mobile"].ToString();
+            string sDeviceToken = Request.Form["device"].ToString();
+            string sDeviceType = Request.Form["type"].ToString();
+            string sOldMPIN = Request.Form["oldmpin"].ToString();
+            string sNewMPIN = Request.Form["newmpin"].ToString();
+
+            if (sMobile == null || sMobile == "" || sDeviceToken == null || sDeviceToken == "" || sDeviceType == null || sDeviceType == "")
+            {
+                Output_Response("999");
+                return;
+            }
+
+            string sResponse= objPassBook.ChangeMPIN(sMobile, sOldMPIN, sNewMPIN, sDeviceToken, sDeviceType);
+            Output_Response(sResponse);
+            clsEvent.LogEvent("Mobile: " + sMobile + ", Device Token: " + sDeviceToken + ",Device Type: " + sDeviceType + ", Status: " + sResponse + " ");
+
+
+        }
+        catch (Exception eee)
+        {
+
+        }
+    }
+    public void Output_Response(string sResponse)
+    {
+        try
+        {
+
+            //Response.Clear();
+            //Response.ClearHeaders();
+            //Response.AddHeader("Content-Type", "text/plain");
+
+            Response.Write(sResponse);
+
+            //Response.Flush();
+            //HttpContext.Current.ApplicationInstance.CompleteRequest();
+
+        }
+        catch (Exception eex)
+        {
+            clsEvent.LogExceptionEvent(eex.Message);
+        }
+
+    }
+}

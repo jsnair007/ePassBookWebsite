@@ -1,0 +1,28 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using System.Collections.Specialized;
+
+public partial class ChangeMPINRequest : System.Web.UI.Page
+{
+    PassBook.ServiceClient objService = new PassBook.ServiceClient();
+    protected void Page_Load(object sender, EventArgs e)
+    {
+
+    }
+    protected void btnSubmit_Click(object sender, EventArgs e)
+    {
+        NameValueCollection postdata = new NameValueCollection();
+        postdata.Add("mobile", TextBox1.Text);
+        postdata.Add("device", TextBox2.Text);
+        postdata.Add("type", TextBox3.Text);
+        postdata.Add("oldmpin", TextBox4.Text);
+        postdata.Add("newmpin", TextBox5.Text);
+
+       // clsPOST.HttpHelper.RedirectAndPOST(this.Page, "http://localhost:49566/VPassBook/ChangeMPIN.aspx", postdata);
+
+    }
+}

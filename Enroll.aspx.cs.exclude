@@ -1,0 +1,59 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using System.Net;
+using System.Collections.Specialized;
+using System.Web.Script.Serialization;
+using System.Runtime.Serialization.Json;
+
+public partial class Enroll : System.Web.UI.Page
+{
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        PassBook.ServiceClient objPassBook = new PassBook.ServiceClient();
+        string sResponse = "";
+        try
+        {
+            string sInput = Request.QueryString.Get("INPUT");
+            //string sInput = Request.Form["INPUT"].ToString();
+            
+            ClassJson.ENROLLMENT objUser=new ClassJson.ENROLLMENT();
+            objUser=ClassJson.JsonDeserialize<ClassJson.ENROLLMENT>(sInput);
+
+            if (objUser.OPCODE == null || objUser.OPCODE == "" || objUser.MOBILENO == "" || objUser.MOBILENO == null || objUser.COUNTRYCODE == "" || objUser.COUNTRYCODE == null || objUser.DEVICEID == "" || objUser.DEVICEID == null || objUser.DEVICETYPE == "" || objUser.DEVICETYPE == null)
+            {
+                objUser.RESPONSECODE = "999";
+                sResponse = ClassJson.JsonSerializer<ClassJson.ENROLLMENT>(objUser);
+                
+            }
+            else
+            {
+                objUser.RESPONSECODE = "000";
+                sResponse = ClassJson.JsonSerializer<ClassJson.ENROLLMENT>(objUser);
+                //sResponse = objUser.RESPONSECODE;
+
+                //check mobile number is numeric and other validations here
+
+                //CHECK THE MOBILE NUMBER IS IN SMS_REG_TBL
+                //IF FOUND THEN 
+                //CHECK THE MOBILE AND DEVICE ID IS REGISTERED IN TBLENROLL 
+                //RESPONSE CODE MAY DIFFER HERE
+
+                ////sResponse= objPassBook.EnrollUser(sOPCode,sCountyCode,sMobile, sDeviceToken, sDeviceType);
+
+                ////clsEvent.LogEvent("Mobile: " + sMobile + ", Device Token: " + sDeviceToken + ",Device Type: " + sDeviceType + ", Status: "+sResponse+" ");
+            }
+            Response.Write(sResponse);
+
+        }
+        catch(Exception eee)
+        {
+            clsEvent.LogExceptionEvent(eee.Message);
+        }
+        
+    }
+
+}

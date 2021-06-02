@@ -1,0 +1,57 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using System.IO;
+
+public partial class _Default : System.Web.UI.Page 
+{
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        //log event
+        try
+        {
+            string sMobile = Request.QueryString.Get("mobile");
+            string sDeviceToken = Request.QueryString.Get("device");
+            string sDeviceType = Request.QueryString.Get("type");
+
+            clsEvent.LogEvent("Mobile No: " + sMobile + ", Device Token: " + sDeviceToken + ", Device Type: " + sDeviceType);
+            Login_Request(sMobile, sDeviceToken, sDeviceType);
+            
+        }
+        catch (Exception eee)
+        {
+            clsEvent.LogExceptionEvent(eee.Message);
+        }
+
+    }
+
+    private void Login_Request(string sMobile,string sDeviceToken,string sDeviceType)
+    {
+        string sResponse = "";
+   
+        Response.Clear();
+        Response.ClearHeaders();
+        Response.AddHeader("Content-Type", "text/plain");
+
+        if (sMobile == null || sMobile=="" || sDeviceToken == null || sDeviceToken=="" || sDeviceType==null || sDeviceType == "")
+        {
+            sResponse = "999";
+        }
+        else
+        {
+            //login here
+
+            sResponse = "000";
+        }
+
+        Response.Write(sResponse);
+        Response.Flush();
+        Response.End();
+        
+
+    }
+    
+}
